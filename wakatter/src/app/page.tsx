@@ -1,7 +1,7 @@
 'use client';
 
 import { useState,useEffect } from 'react';
-import wakas from '../../data/wakas.json';
+import wakas from '../../data/wakas_src.json';
 
 export default function Home(){
   const [emotion, setEmotion]=useState('');

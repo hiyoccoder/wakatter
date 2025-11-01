@@ -3,7 +3,7 @@ dotenv.config({ path: ".env.local" });
 
 import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
-import wakas from "../data/wakas.json" assert {type: "json"};
+import wakas from "../data/wakas_fix.json" assert {type: "json"};
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY!});
 const supabase = createClient(
@@ -37,6 +37,9 @@ const supabase = createClient(
         
         if (error) console.error(`❌ ${waka.id}: ${error.message}`);
         else console.log(`✅ 登録完了: ${waka.id}「${waka.text.slice(0, 10)}...」`);
+
+        // 💡 OpenAIのRateLimit防止
+        await new Promise((r) => setTimeout(r, 1000));
     }
     console.log("\n🎉 すべての和歌がSupabaseに登録されました！");
 })();

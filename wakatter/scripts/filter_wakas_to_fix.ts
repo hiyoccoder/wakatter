@@ -1,5 +1,5 @@
 import fs from "fs";
-import wakas from "../data/wakas.json" assert { type: "json" };
+import wakas from "../data/wakas_src.json" assert { type: "json" };
 
 // 定型文のキーワード
 const MODERN_PLACEHOLDER = "情景や心情を詠んだ和歌です";
@@ -13,7 +13,7 @@ const filtered = wakas.filter(
     w.waka_commentary?.includes(COMMENT_PLACEHOLDER)
 );
 
-fs.writeFileSync("./data/wakas_to_fix.json", JSON.stringify(filtered, null, 2), "utf-8");
+fs.writeFileSync("./data/wakas_filter.json", JSON.stringify(filtered, null, 2), "utf-8");
 
 console.log(`🪶 修正対象: ${filtered.length} 首を抽出しました！`);
-console.log("📁 data/wakas_to_fix.json に出力されました。");
+console.log("📁 data/wakas_filter.json に出力されました。");
