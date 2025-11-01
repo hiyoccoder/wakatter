@@ -3,7 +3,7 @@ dotenv.config({ path: ".env.local" });
 
 import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
-import wakas from "../data/wakas_src.json" assert {type: "json"};
+import wakas from "../data/wakas.json" assert {type: "json"};
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY!});
 const supabase = createClient(
@@ -15,28 +15,35 @@ const supabase = createClient(
     console.log(`🪶 ${wakas.length} 首のEmbeddingを生成します...\n`);
 
     for (const waka of wakas) {
+        if (!waka || typeof waka !== 'object') continue;
+    try {
         const input = `${waka.text} ${waka.modern}`;
 
         const embeddingRes = await openai.embeddings.create({
-            model: "text-embedding-3-small",
-            input,
+        model: "text-embedding-3-small",
+        input,
         });
         const embedding = embeddingRes.data[0].embedding;
 
-        const {error} = await supabase.from("wakas").insert({
-            id: waka.id,
-            category: waka.category,
-            subcategory: waka.subcategory,
-            text: waka.text,
-            author: waka.author,
-            modern: waka.modern,
-            person_intro: waka.person_intro,
-            waka_commentary: waka.waka_commentary,
-            embedding,
+        const { error } = await supabase.from("wakas").insert({
+        id: waka.id,
+        category: waka.category,
+        subcategory: waka.subcategory,
+        text: waka.text,
+        author: waka.author,
+        modern: waka.modern,
+        person_intro: waka.person_intro,
+        waka_commentary: waka.waka_commentary,
+        embedding,
         });
 
         if (error) console.error(`❌ ${waka.id}: ${error.message}`);
         else console.log(`✅ 登録完了: ${waka.id}「${waka.text.slice(0, 10)}...」`);
+    } catch (err) {
+        console.error(`⚠️ ${waka.id} 異常終了: ${(err as Error).message}`);
+    }
+
+    await new Promise((r) => setTimeout(r, 1000));
     }
     console.log("\n🎉 すべての和歌がSupabaseに登録されました！");
 })();

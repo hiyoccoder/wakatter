@@ -3,7 +3,7 @@ dotenv.config({ path: ".env.local" });
 
 import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
-import wakas from "../data/wakas_fix.json" assert {type: "json"};
+import wakas from "../data/wakas.json" assert {type: "json"};
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY!});
 const supabase = createClient(
