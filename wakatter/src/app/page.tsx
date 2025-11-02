@@ -54,12 +54,113 @@ export default function Home() {
       {/* Twitter風ヘッダー */}
       <header className="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 z-50">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold">wakatter</h1>
-          <div className="text-xs text-gray-400">古今和歌集から共鳴する和歌を発見</div>
+          <img src="/ico_wakatter.svg" alt="wakatter" className="h-6" />
+          <div className="text-xs text-gray-400">古今和歌集から今の感情にぴったりな和歌を発見</div>
         </div>
       </header>
 
       <div className="max-w-2xl mx-auto">
+        {/* ヘッダー画像セクション */}
+        <div className="relative h-48 bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 overflow-hidden">
+          {/* 背景パターン */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 30c0-16.569 13.431-30 30-30v60c-16.569 0-30-13.431-30-30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            }}></div>
+          </div>
+          
+          {/* 和歌的な装飾要素 */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-white/30 text-6xl font-serif mb-2">桜</div>
+              <div className="text-white/20 text-sm tracking-wider">古今和歌集</div>
+            </div>
+          </div>
+          
+          {/* 右下の装飾 */}
+          <div className="absolute bottom-4 right-4 text-white/10 text-2xl">
+            🌸
+          </div>
+          
+          {/* 左上の装飾 */}
+          <div className="absolute top-4 left-4 text-white/10 text-xl">
+            📜
+          </div>
+          
+          {/* グラデーションオーバーレイ */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30"></div>
+        </div>
+
+        {/* wakatter紹介セクション */}
+        <div className="border-b border-gray-800 p-6 bg-gray-950/30 relative">
+          <div className="flex gap-4">
+            {/* wakatterアイコン - ヘッダー画像に半円オーバーラップ */}
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-400 via-purple-500 to-blue-600 flex items-center justify-center flex-shrink-0 border-4 border-black relative z-10 -mt-8">
+              <span className="text-white font-bold text-xl">歌</span>
+            </div>
+            
+            {/* プロフィール情報 */}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <h2 className="text-xl font-bold">wakatter</h2>
+                <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-medium">公式</div>
+              </div>
+              <p className="text-gray-400 text-sm mb-1">@wakatter_official</p>
+              
+              <div className="mb-4">
+                <p className="text-white leading-relaxed mb-2">
+                  感情と古今和歌集をつなぐソーシャルプラットフォーム 🌸
+                </p>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  あなたの今の気持ちに共鳴する千年前の和歌を見つけます。AI が古今和歌集1000首の中から、心の琴線に触れる一首を選んでお届け。
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-6 text-gray-400 text-sm">
+                <div className="flex items-center gap-1">
+                  <span>📍</span>
+                  <span>平安時代〜現代</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>🎌</span>
+                  <span>古今和歌集</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>🤖</span>
+                  <span>AI搭載</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-6 text-sm mt-3">
+                <div>
+                  <span className="font-bold text-white">1,000</span>
+                  <span className="text-gray-400 ml-1">和歌</span>
+                </div>
+                <div>
+                  <span className="font-bold text-white">∞</span>
+                  <span className="text-gray-400 ml-1">共鳴</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* 使い方のヒント */}
+          <div className="mt-4 p-4 bg-blue-900/20 rounded-xl border border-blue-800/30">
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-white text-xs">💡</span>
+              </div>
+              <div>
+                <p className="text-blue-300 font-medium text-sm mb-1">使い方</p>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  「悲しい」「嬉しい」「切ない」など、今の気持ちを自由につぶやいてみてください。
+                  AIが古今和歌集から、あなたの心に響く一首を見つけてお返しします。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* ツイート投稿エリア */}
         <div className="border-b border-gray-800 p-4">
           <div className="flex gap-3">
