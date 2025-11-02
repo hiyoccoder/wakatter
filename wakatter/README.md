@@ -3,7 +3,7 @@
 現代の感情に近い和歌をマッチングして表示するアプリ。
 
 ## 技術スタック
-- Next.js 15 (TypeScript)
+- Next.js 16 (TypeScript)
 - Tailwind CSS
 - Vercel (デプロイ予定)
 
