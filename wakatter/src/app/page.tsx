@@ -2,12 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 export default function Home() {
   const [emotion, setEmotion] = useState("")
   const [tweets, setTweets] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  
+  // 一度決定されたヒントを永続的に保存するRef
+  const fixedTipsRef = useRef<{ [key: number]: string }>({})
 
   const tips = [
     "もう少し具体的に！",
@@ -19,6 +22,14 @@ export default function Home() {
 
   const getRandomTip = () => {
     return tips[Math.floor(Math.random() * tips.length)]
+  }
+
+  // エラーツイート用の固定ヒントを取得（一度決定されたら変更されない）
+  const getFixedTip = (tweetId: number) => {
+    if (!fixedTipsRef.current[tweetId]) {
+      fixedTipsRef.current[tweetId] = getRandomTip()
+    }
+    return fixedTipsRef.current[tweetId]
   }
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -53,7 +64,10 @@ export default function Home() {
       const errorTweet = {
         id: Date.now(),
         emotion: emotion,
-        result: { error: "エラーが発生しました。もう一度お試しください。" },
+        result: { 
+          error: "エラーが発生しました。もう一度お試しください。",
+          tip: getRandomTip() // エラー発生時にヒントを固定
+        },
         timestamp: new Date()
       }
       setTweets(prev => [...prev, errorTweet])
@@ -332,13 +346,7 @@ export default function Home() {
                     <span className="text-gray-500 text-sm">{tweet.timestamp.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                   <p className="text-black mb-2">{tweet.result.error}</p>
-                  <p className="text-gray-700 mb-3">💡 <strong>{getRandomTip()}</strong></p>
-                  <button 
-                    onClick={() => setTweets(prev => prev.filter(t => t.id !== tweet.id))}
-                    className="text-blue-400 hover:text-blue-300 text-sm transition-colors"
-                  >
-                    もう一度投稿してみる →
-                  </button>
+                  <p className="text-gray-700 mb-3">💡 <strong>{tweet.result.tip || getFixedTip(tweet.id)}</strong></p>
                   <div className="flex items-center gap-6 text-gray-500 text-sm mt-3">
                     <button className="flex items-center gap-2">
                       <span><img src="/ico_balloon.svg" alt="" className="h-4" /></span>
