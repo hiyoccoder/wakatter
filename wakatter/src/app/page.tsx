@@ -32,6 +32,17 @@ export default function Home() {
     return fixedTipsRef.current[tweetId]
   }
 
+  // 和歌を上の句と下の句に分ける（3つ目の空白で改行）
+  const formatWaka = (wakaText: string) => {
+    const parts = wakaText.split(/\s+/)
+    if (parts.length >= 3) {
+      const kamiNoKu = parts.slice(0, 3).join('　')  // 上の句（最初の3つ）
+      const shimoNoKu = parts.slice(3).join('　')    // 下の句（残り）
+      return `${kamiNoKu}\n${shimoNoKu}`
+    }
+    return wakaText  // 3つ未満の場合はそのまま返す
+  }
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!emotion.trim()) return
@@ -207,7 +218,7 @@ export default function Home() {
                   </div>
                   <div className="bg-gray-100 rounded-2xl p-6 mb-3">
                     <div className="flex justify-center mb-4">
-                      <p className="waka-vertical font-serif text-xl text-center text-black">{tweet.result.match.text}</p>
+                      <p className="waka-vertical font-serif text-xl text-center text-black whitespace-pre-line">{formatWaka(tweet.result.match.text)}</p>
                     </div>
                     <p className="text-gray-600 text-center mb-2">— {tweet.result.match.author}</p>
                     <div className="border-t border-gray-300 pt-3 mt-3">
@@ -237,7 +248,7 @@ export default function Home() {
                     <span className="text-gray-500">·</span>
                     <span className="text-gray-500 text-sm">{tweet.timestamp.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
-                  <p className="text-black mb-3">🎤 {tweet.result.match.text}</p>
+                  <p className="text-black mb-3">🎤 {formatWaka(tweet.result.match.text)}</p>
                   <p className="text-black mb-3">✨ {tweet.result.reasoning}</p>
                   <div className="flex items-center gap-6 text-gray-500 text-sm">
                     <button className="flex items-center gap-2">
