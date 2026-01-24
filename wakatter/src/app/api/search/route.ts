@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
-import { summarizeInstruction, empathyInstruction } from "@/lib/prompt";
+import { summarizeInstruction, empathyInstruction } from "@/src/lib/prompt";
 
 const supabase = createClient(
     process.env.SUPABASE_URL!,

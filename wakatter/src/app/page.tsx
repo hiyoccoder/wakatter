@@ -13,7 +13,7 @@ import EmpathyReply from '@/src/components/tweet/EmpathyReply'
 import ClassicGuideReply from '@/src/components/tweet/ClassicGuideReply'
 import PoetIntroReply from '@/src/components/tweet/PoetIntroReply'
 import SupportReply from '@/src/components/tweet/SupportReply'
-import { isSuccessResult, isErrorResult } from '@/src/types'
+import { isSuccessResult } from '@/src/types'
 import { useTweets } from '@/src/hooks/useTweets'
 
 export default function Home() {
@@ -40,35 +40,25 @@ export default function Home() {
         <Profile />
 
         {/* ツイートスレッド表示 */}
-        {tweets.map((tweet) => 
-          isSuccessResult(tweet.result) ? (
+        {tweets.map((tweet) => (
           <div key={tweet.id} className="animate-fadeIn">
-
             <UserTweet emotion={tweet.emotion} timestamp={tweet.timestamp} />
-
-            <WakatterReply timestamp={tweet.timestamp} wakaText={tweet.result.match.text} author={tweet.result.match.author} modern={tweet.result.match.modern} />
-
-            <EmpathyReply timestamp={tweet.timestamp} wakaText={tweet.result.match.text} reasoning={tweet.result.reasoning} />
-
-            {tweet.result.match.waka_commentary && (
-            <ClassicGuideReply timestamp={tweet.timestamp} wakaCommentary={tweet.result.match.waka_commentary} />
-            )}
-
-            {tweet.result.match.person_intro && (
-              <PoetIntroReply timestamp={tweet.timestamp} wakaCommentary={tweet.result.match.person_intro} />
+            
+            {isSuccessResult(tweet.result) ? (
+              <>
+                <WakatterReply timestamp={tweet.timestamp} wakaText={tweet.result.match.text} author={tweet.result.match.author} modern={tweet.result.match.modern} />
+                <EmpathyReply timestamp={tweet.timestamp} wakaText={tweet.result.match.text} reasoning={tweet.result.reasoning} />
+                {tweet.result.match.waka_commentary && (
+                  <ClassicGuideReply timestamp={tweet.timestamp} wakaCommentary={tweet.result.match.waka_commentary} />
+                )}
+                {tweet.result.match.person_intro && (
+                  <PoetIntroReply timestamp={tweet.timestamp} wakaCommentary={tweet.result.match.person_intro} />
+                )}
+              </>
+            ) : (
+              <SupportReply timestamp={tweet.timestamp} error={tweet.result.error} tip={tweet.result.tip || getFixedTip(tweet.id)} />
             )}
           </div>
-          ) : null
-        )}
-        
-        {/* エラーツイート表示 */}
-        {tweets.map((tweet) => (
-          isErrorResult(tweet.result) ? (
-            <div key={tweet.id} className="animate-fadeIn">
-              <UserTweet emotion={tweet.emotion} timestamp={tweet.timestamp} />
-              <SupportReply timestamp={tweet.timestamp} error={tweet.result.error} tip={tweet.result.tip || getFixedTip(tweet.id)} />
-            </div>
-          ) : null
         ))}
 
         <TweetInput emotion={emotion} setEmotion={setEmotion} loading={loading} onSubmit={handleSearchSubmit} />

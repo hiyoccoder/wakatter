@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import { Tweet } from '@/src/types'
 import { tips } from '@/src/utils/constants'
+import { fetchWakaForEmotion } from '@/src/services/api'
+import { isSuccessResult } from '@/src/types'
 
 export const useTweets = () => {
     // 状態管理
@@ -26,24 +28,28 @@ export const useTweets = () => {
         setLoading(true)
 
         try {
-        const res = await fetch("/api/search", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ emotion }),
-        })
-
-        const data = await res.json()
-        
-        // 新しいツイートを配列の末尾に追加
-        const newTweet = {
-            id: Date.now(),
-            emotion: emotion,
-            result: data,
-            timestamp: new Date()
+        const data = await fetchWakaForEmotion(emotion)
+        if (isSuccessResult(data)) {
+            const newTweet = {
+                id: Date.now(),
+                emotion: emotion,
+                result: data,
+                timestamp: new Date()
+            }
+            setTweets(prev => [...prev, newTweet])
+        }else{
+            const errorTweet = {
+                id: Date.now(),
+                emotion: emotion,
+                result: { 
+                error: "エラーが発生しました。もう一度お試しください。",
+                tip: getRandomTip() // エラー発生時にヒントを固定
+                },
+                timestamp: new Date()
+            }
+            setTweets(prev => [...prev, errorTweet])
         }
-        setTweets(prev => [...prev, newTweet])
+        
         } catch (err) {
         console.error(err)
         // エラーの場合もツイートとして追加
