@@ -1,4 +1,4 @@
-{/* wakatter紹介セクション */}
+/* wakatter紹介セクション */
 export default function Profile() {
     return (
     <div className="border-b border-gray-200 px-6 py-4 bg-gray-50/30 relative">
