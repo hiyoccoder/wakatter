@@ -12,7 +12,7 @@ import WakatterReply from '@/src/components/tweet/WakatterReply'
 import EmpathyReply from '@/src/components/tweet/EmpathyReply'
 import ClassicGuideReply from '@/src/components/tweet/ClassicGuideReply'
 import PoetIntroReply from '@/src/components/tweet/PoetIntroReply'
-import ErrorReply from '@/src/components/tweet/ErrorReply'
+import SupportReply from '@/src/components/tweet/SupportReply'
 import { isSuccessResult, isErrorResult } from '@/src/types'
 import { useTweets } from '@/src/hooks/useTweets'
 
@@ -64,7 +64,10 @@ export default function Home() {
         {/* エラーツイート表示 */}
         {tweets.map((tweet) => (
           isErrorResult(tweet.result) ? (
-            <ErrorReply id={tweet.id} timestamp={tweet.timestamp} emotion={tweet.emotion} error={tweet.result.error} tip={tweet.result.tip || getFixedTip(tweet.id)} />
+            <div key={tweet.id} className="animate-fadeIn">
+              <UserTweet emotion={tweet.emotion} timestamp={tweet.timestamp} />
+              <SupportReply timestamp={tweet.timestamp} error={tweet.result.error} tip={tweet.result.tip || getFixedTip(tweet.id)} />
+            </div>
           ) : null
         ))}
 
