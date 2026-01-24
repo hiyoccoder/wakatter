@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 import { summarizeInstruction, empathyInstruction } from "@/src/lib/prompt";
+import { generateEmbedding } from "@/src/services/openai";
 
 const supabase = createClient(
     process.env.SUPABASE_URL!,
@@ -32,11 +33,10 @@ export async function POST(req: Request) {
     const summarized = summarizeRes.choices[0].message.content?.trim();
 
     // Embedding生成
-    const embeddingRes = await openai.embeddings.create({
-        model: "text-embedding-3-small",
-        input: summarized!,
-    });
-    const queryEmbedding = embeddingRes.data[0].embedding;
+    if (!summarized) {
+        return NextResponse.json({ error: "感情の要約に失敗しました" });
+    }
+    const queryEmbedding = await generateEmbedding(summarized);
 
     // 和歌検索
     const { data, error } = await supabase.rpc("match_wakas", {

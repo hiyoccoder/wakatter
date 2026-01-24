@@ -1,11 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
-import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
 import wakas from "../data/wakas.json" assert {type: "json"};
+import { generateEmbedding } from "@/src/services/openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY!});
 const supabase = createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -17,11 +16,7 @@ const supabase = createClient(
     for (const waka of wakas) {
         const input = `${waka.text} ${waka.modern}`;
 
-        const embeddingRes = await openai.embeddings.create({
-            model: "text-embedding-3-small",
-            input,
-        });
-        const embedding = embeddingRes.data[0].embedding;
+        const embedding = await generateEmbedding(input);
 
         const { error } = await supabase.from("wakas").upsert({
             id: waka.id,
